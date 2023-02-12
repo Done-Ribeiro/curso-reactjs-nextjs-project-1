@@ -3,6 +3,7 @@ import './App.css';
 
 class App extends Component {
   state = {
+    counter: 0,
     posts: [
       {
         id: 1,
@@ -21,15 +22,42 @@ class App extends Component {
       },
     ],
   };
+  timeoutUpdate = null;
+
+  // executa 1x assim que o componente é montado na tela
+  // muito usado para carregamento de dados de uma API
+  componentDidMount() {
+    this.handleTimeout();
+  }
+
+  // executa toda a vez que um estado é atualizado
+  // (pode gerar loop infinito)
+  componentDidUpdate() {
+    this.handleTimeout();
+  }
+
+  // executa toda a vez que o componente vai ser desmontado
+  // perfeito pra limpar "lixo" da tela, como o timeout no nosso caso
+  componentWillUnmount() {
+    clearTimeout(this.timeoutUpdate);
+  }
+
+  handleTimeout = () => {
+    const { counter, posts } = this.state;
+    posts[0].title = 'O título mudou';
+
+    this.timeoutUpdate = setTimeout(() => {
+      this.setState({ posts, counter: counter + 1 });
+    }, 5000);
+  };
 
   render() {
-    const { posts } = this.state;
+    const { counter, posts } = this.state;
 
     return (
       <div className="App">
+        <h1>{counter}</h1>
         {posts.map((post) => (
-          // a key precisa sempre estar ligada ao pai, nesse caso a div
-          // poderia ser um fragmento por exemplo: <>...</>
           <div key={post.id}>
             <h1>{post.title}</h1>
             <p>{post.body}</p>
