@@ -32,17 +32,12 @@ describe('<Posts />', () => {
     expect(screen.getAllByRole('heading', { name: /title/i })).toHaveLength(3);
     expect(screen.getAllByRole('img', { name: /title/i })).toHaveLength(3);
     expect(screen.getAllByText(/body/i)).toHaveLength(3);
-    expect(screen.getByRole('img', { name: /title 3/i })).toHaveAttribute(
-      'src',
-      'img/img3.png'
-    );
+    expect(screen.getByRole('img', { name: /title 3/i })).toHaveAttribute('src', 'img/img3.png');
   });
 
   it('should not render posts', () => {
     render(<Posts />);
-    expect(
-      screen.queryByRole('heading', { name: /title/i })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /title/i })).not.toBeInTheDocument();
   });
 
   it('should match snapshot', () => {
