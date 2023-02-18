@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 // import { click } from '@testing-library/user-event/dist/click';
-
 import { Button } from '.';
 
 describe('<Button />', () => {
