@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import './styles.css';
 
-import { loadPosts } from '../../utils/load-posts';
 import { Posts } from '../../components/Posts';
+import { loadPosts } from '../../utils/load-posts';
 import { Button } from '../../components/Button';
 import { TextInput } from '../../components/TextInput';
 
@@ -14,14 +14,6 @@ export const Home = () => {
   const [postsPerPage] = useState(2);
   const [searchValue, setSearchValue] = useState('');
 
-  const noMorePosts = page + postsPerPage >= allPosts.length;
-
-  const filteredPosts = searchValue
-    ? allPosts.filter((post) => {
-        return post.title.toLowerCase().includes(searchValue.toLowerCase());
-      })
-    : posts;
-
   const handleLoadPosts = useCallback(async (page, postsPerPage) => {
     const postsAndPhotos = await loadPosts();
 
@@ -30,6 +22,7 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
+    // console.log(new Date().toLocaleString('pt-BR'));
     handleLoadPosts(0, postsPerPage);
   }, [handleLoadPosts, postsPerPage]);
 
@@ -47,10 +40,18 @@ export const Home = () => {
     setSearchValue(value);
   };
 
+  const noMorePosts = page + postsPerPage >= allPosts.length;
+  const filteredPosts = searchValue
+    ? allPosts.filter((post) => {
+        return post.title.toLowerCase().includes(searchValue.toLowerCase());
+      })
+    : posts;
+
   return (
     <section className="container">
       <div className="search-container">
         {!!searchValue && <h1>Search value: {searchValue}</h1>}
+
         <TextInput searchValue={searchValue} handleChange={handleChange} />
       </div>
 
