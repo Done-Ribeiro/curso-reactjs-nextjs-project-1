@@ -5,6 +5,8 @@ import { render, screen, waitForElementToBeRemoved, fireEvent } from '@testing-l
 import { Home } from '.';
 import userEvent from '@testing-library/user-event';
 
+import { act } from '@testing-library/react';
+
 const handlers = [
   rest.get('*jsonplaceholder.typicode.com*', async (req, res, ctx) => {
     return res(
@@ -80,17 +82,17 @@ describe('<Home />', () => {
     expect(screen.getByRole('heading', { name: 'title2 2' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'title3 3' })).not.toBeInTheDocument();
 
-    userEvent.type(search, 'title1');
+    act(() => userEvent.type(search, 'title1'));
     expect(screen.getByRole('heading', { name: 'title1 1' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'title2 2' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'title3 3' })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Search value: title1' })).toBeInTheDocument();
 
-    userEvent.clear(search);
+    act(() => userEvent.clear(search));
     expect(screen.getByRole('heading', { name: 'title1 1' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'title2 2' })).toBeInTheDocument();
 
-    userEvent.type(search, 'post does not exist');
+    act(() => userEvent.type(search, 'post does not exist'));
     expect(screen.getByText('Não existem posts =(')).toBeInTheDocument();
   });
 
